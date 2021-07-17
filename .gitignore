@@ -4,3 +4,4 @@
 .terraform/
 venv/
 .terraform*
+terraform.tfstate*
