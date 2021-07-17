@@ -24,8 +24,8 @@ spec:
     apiVersion: apps/v1
     kind: Deployment
     name: webserver
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.autoscaling.minReplicas | default 2 }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas | default 2 }}
   targetCPUUtilizationPercentage: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
 {{ end }}
 ---
@@ -50,6 +50,8 @@ spec:
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
         - containerPort: {{ .Values.service.port }}
+        volumeMounts:
+          -
 {{- if .Values.resources }}
 {{ toYaml .Values.resources | indent 8 }}
 {{ else }}
