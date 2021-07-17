@@ -1,0 +1,9 @@
+apiVersion: v2
+name: webserver
+description: A basic web server deployment example using Helm.
+
+type: application
+
+version: 0.1.0
+
+appVersion: "1.16.0"

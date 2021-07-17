@@ -1,0 +1,24 @@
+replicaCount: 1
+
+image:
+  pullPolicy: Always
+  name: httpd
+  # Overrides the image tag, by default, latest.
+  tag: ""
+
+service:
+  port: 443
+
+resources: {}
+  #limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  #requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80

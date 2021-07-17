@@ -1,0 +1,61 @@
+---
+# Expose running apache server containers with a Service.
+apiVersion: v1
+kind: Service
+metadata:
+  name: webserver
+  labels:
+    app: webserver
+spec:
+  ports:
+  - port: {{ .Values.service.port }}
+    protocol: TCP
+  selector:
+    app: webserver
+{{ if .Values.autoscaling.enabled }}
+---
+# Scale httpd pod instances by resource consumption using an HPA.
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: webserver
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: webserver
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  targetCPUUtilizationPercentage: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+{{ end }}
+---
+# Base Deployment manifest for httpd pods.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webserver
+spec:
+  selector:
+    matchLabels:
+      app: webserver
+  replicas: {{ .Values.replicaCount }}
+  template:
+    metadata:
+      labels:
+        app: webserver
+    spec:
+      containers:
+      - name: {{ .Values.image.name }}
+        image: {{ .Values.image.name }}:{{ if .Values.image.tag }}{{ .Values.image.tag }}{{ else }}latest{{ end }}
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.service.port }}
+{{- if .Values.resources }}
+{{ toYaml .Values.resources | indent 8 }}
+{{ else }}
+        resources:
+          limits:
+            cpu: 500m
+          requests:
+            cpu: 200m
+{{ end }}
