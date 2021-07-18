@@ -3,33 +3,31 @@ kind: Deployment
 metadata:
   name: {{ include "example.fullname" . }}
   labels:
-    {{- include "example.labels" . | nindent 4 }}
+{{- toYaml .Values.example.labels | nindent 4 }}
 spec:
   selector:
     matchLabels:
-      {{- include "example.selectorLabels" . | nindent 6 }}
+{{- toYaml .Values.example.selectorLabels | nindent 6 }}
   template:
     metadata:
     spec:
-      serviceAccountName: {{ include "example.serviceAccountName" . }}
+      serviceAccountName: {{ .Values.example.serviceAccountName }}
       containers:
         - name: {{ .Chart.Name }}
           # Modifying the following lines to ensure the cluster pulls secrets to access a private repository on Docker Hub.
           # Repository hosts the exact same container image as bjd2385/httpd, from website/Dockerfile in this repository.
-          image: "bjd2385/private-httpd-mod:latest"
+          image: {{ .Values.image.name }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - name: http
-              containerPort: 80
+            - name: https
+              containerPort: 443
               protocol: TCP
           livenessProbe:
-            httpGet:
-              path: /
-              port: http
+            tcpSocket:
+              port: 443
           readinessProbe:
-            httpGet:
-              path: /
-              port: http
+            tcpSocket:
+              port: 443
 {{- if .Values.resources }}
 {{ toYaml .Values.resources | indent 8 }}
 {{ else }}

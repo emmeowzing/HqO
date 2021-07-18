@@ -8,9 +8,11 @@ example:
     app: test-server-app
     nodes: frontend
 
-  serviceAccountName: default
+  serviceAccountName: private
 
 image:
+  name: bjd2385/private-httpd-mod
+  tag: "" # grab latest
   pullPolicy: Always
 
 resources: {}
