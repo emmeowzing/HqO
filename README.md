@@ -7,6 +7,8 @@ Here's a breakdown of this repository's structure -
 * `fixes/` - a Helm chart containing a solution to the provided `deployment.yaml` ensuring both that
     1. an image can be pulled from a private container repository, and
     2. if the containerized application has a memory leak, it will not consume all the resources on a node.
+  
+  See also [my notes below](#additional-configurationsetup-steps-for-fixes) pertaining to this solution.
 * `terraform/` - used to manage state and aid in testing these Helm charts on a cluster.
 * `website/` - hosts a `Dockerfile` I've used to customize `httpd` with TLS/HTTPS enabled (keys intentionally included, since they may be retrieved from the publicly-accessible container image on [Docker Hub](https://hub.docker.com/r/bjd2385/httpd-mod) anyways, and this is only for testing, without a CA).
 
@@ -50,7 +52,7 @@ serviceaccount/default patched
 
 3. Uncomment [`terraform/main.tf#L36-43`](terraform/main.tf#L36) and comment-out the former resource block pertaining to the webserver deployment implementation, followed by applying these changes with Terraform.
 
-In my own cluster, I see that the image is pulled successfully and starts:
+In my own cluster, I see that the image is pulled from my private repository and successfully starts:
 ```shell
 $ k describe pod test-server-959dd6866-2qdmh
 Name:         test-server-959dd6866-2qdmh
