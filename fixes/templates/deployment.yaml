@@ -14,7 +14,9 @@ spec:
       serviceAccountName: {{ include "example.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "my-private-repo/my-service:latest"
+          # Modifying the following lines to ensure the cluster pulls secrets to access a private repository on Docker Hub.
+          # Repository hosts the exact same container image as bjd2385/httpd, from website/Dockerfile in this repository.
+          image: "bjd2385/private-httpd-mod:latest"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -30,10 +32,13 @@ spec:
               port: http
 {{- if .Values.resources }}
 {{ toYaml .Values.resources | indent 8 }}
-{{ else } }
+{{ else }}
+          # Set default resource constraints to ensure the mem leak doesn't take over the entire node.
           resources:
             limits:
               cpu: 500m
+              mem: 500Mi
             requests:
               cpu: 200m
+              mem: 200Mi
 {{ end }}
