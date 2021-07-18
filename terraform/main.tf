@@ -13,14 +13,14 @@ resource "kubernetes_manifest" "namespace" {
 
 # Install Metrics Server on the cluster for HPA.
 # https://artifacthub.io/packages/helm/bitnami/metrics-server
-resource "helm_release" "metrics_server" {
-  provider = helm
-
-  name       = "metrics-server"
-  repository = "https://charts.bitnami.com/bitnami"
-  chart      = "metrics-server"
-  version    = "5.9.0"
-}
+#resource "helm_release" "metrics_server" {
+#  provider = helm
+#
+#  name       = "metrics-server"
+#  repository = "https://charts.bitnami.com/bitnami"
+#  chart      = "metrics-server"
+#  version    = "5.9.0"
+#}
 
 # Deploy my web server.
 resource "helm_release" "webserver" {

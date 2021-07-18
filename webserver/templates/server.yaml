@@ -12,6 +12,8 @@ spec:
     protocol: TCP
   selector:
     app: webserver
+  # Expose this server so it's publicly accessible on an external IP.
+  type: LoadBalancer
 {{ if .Values.autoscaling.enabled }}
 ---
 # Scale httpd pod instances by resource consumption using an HPA.
@@ -45,7 +47,7 @@ spec:
         app: webserver
     spec:
       containers:
-      - name: {{ .Values.image.name }}
+      - name: {{ .Chart.Name }}
         image: {{ .Values.image.name }}:{{ if .Values.image.tag }}{{ .Values.image.tag }}{{ else }}latest{{ end }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         ports:
@@ -60,10 +62,8 @@ spec:
             cpu: 200m
 {{ end }}
         livenessProbe:
-          httpGet:
-            path: /
-            port: https
+          tcpSocket:
+            port: 443
         readinessProbe:
-          httpGet:
-            path: /
-            port: http
+          tcpSocket:
+            port: 443

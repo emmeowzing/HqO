@@ -2,7 +2,7 @@ replicaCount: 1
 
 image:
   pullPolicy: Always
-  name: httpd
+  name: bjd2385/httpd-mod
   # Overrides the image tag, by default, latest.
   tag: ""
 
