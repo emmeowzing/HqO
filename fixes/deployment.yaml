@@ -28,3 +28,12 @@ spec:
             httpGet:
               path: /
               port: http
+{{- if .Values.resources }}
+{{ toYaml .Values.resources | indent 8 }}
+{{ else } }
+          resources:
+            limits:
+              cpu: 500m
+            requests:
+              cpu: 200m
+{{ end }}

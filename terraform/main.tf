@@ -1,4 +1,4 @@
-# Create a namespace for our resources.
+# Create a namespace for these resources.
 resource "kubernetes_manifest" "namespace" {
   provider = kubernetes-alpha
 
