@@ -1,19 +1,21 @@
 example:
   fullname: test-server
 
-  labels:
-    app: test-server-app
+labels:
+  app: test-server-app
+  nodes: frontend
 
-  selectorLabels:
-    app: test-server-app
-    nodes: frontend
+selectorLabels:
+  nodes: frontend
 
-  serviceAccountName: private
+  # Because this is only an example, and not an actual production case, I've modded the default ns.
+  serviceAccountName: default
 
 image:
   name: bjd2385/private-httpd-mod
   tag: "" # grab latest
   pullPolicy: Always
+  secretName: personal-docker-private
 
 resources: {}
   #limits:

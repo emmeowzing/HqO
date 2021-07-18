@@ -31,3 +31,13 @@ resource "helm_release" "webserver" {
   values    = [file("${var.webserver_helm_chart_directory}/values.yaml")]
   namespace = kubernetes_manifest.namespace.manifest.metadata.name
 }
+
+# Deploy fixes Deployment to cluster for testing access to secrets.
+#resource "helm_release" "fixes" {
+#  provider = helm
+#
+#  name      = "fixes"
+#  chart     = var.fixes_helm_chart_directory
+#  values    = [file("${var.fixes_helm_chart_directory}/values.yaml")]
+#  namespace = "default"
+#}

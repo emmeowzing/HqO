@@ -1,22 +1,27 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "example.fullname" . }}
+  name: {{ .Values.example.fullname }}
   labels:
-{{- toYaml .Values.example.labels | nindent 4 }}
+{{- toYaml .Values.labels | nindent 4 }}
 spec:
+  replicas: 1
   selector:
     matchLabels:
-{{- toYaml .Values.example.selectorLabels | nindent 6 }}
+{{- toYaml .Values.selectorLabels | nindent 6 }}
   template:
     metadata:
+      labels:
+{{- toYaml .Values.selectorLabels | nindent 8 }}
     spec:
       serviceAccountName: {{ .Values.example.serviceAccountName }}
+      imagePullSecrets:
+        - name: {{ .Values.image.secretName }}
       containers:
         - name: {{ .Chart.Name }}
           # Modifying the following lines to ensure the cluster pulls secrets to access a private repository on Docker Hub.
           # Repository hosts the exact same container image as bjd2385/httpd, from website/Dockerfile in this repository.
-          image: {{ .Values.image.name }}
+          image: {{ .Values.image.name }}:{{ if .Values.image.tag }}{{ .Values.image.tag }}{{ else }}latest{{ end }}
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: https
@@ -35,8 +40,8 @@ spec:
           resources:
             limits:
               cpu: 500m
-              mem: 500Mi
+              memory: 500Mi
             requests:
               cpu: 200m
-              mem: 200Mi
-{{ end }}
+              memory: 200Mi
+{{ end -}}

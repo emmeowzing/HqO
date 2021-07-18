@@ -29,7 +29,7 @@ should be able to access the website at the external IP listed under `kubectl ge
 
 To pull from my private DockerHub repository, which hosts the same image as in the public repository, I've taken the following steps on my clusters.
 
-1. Create a secret containing my DockerHub login credential:
+1. Create a secret containing the DockerHub login credential:
 ```shell
 $ read -s -r -p "Password: " passwd; printf "\\n"; k create secret docker-registry personal-docker-private --docker-username=bjd2385 --docker-password="$passwd" --docker-email=bjd2385.linux@gmail.com
 Password: 
@@ -48,4 +48,32 @@ $ kubectl patch serviceaccount default -p '{"imagePullSecrets": [{"name": "perso
 serviceaccount/default patched
 ```
 
-3. 
+3. Uncomment [`terraform/main.tf#L36-43`](terraform/main.tf#L36) and comment-out the former resource block pertaining to the webserver deployment implementation, followed by applying these changes with Terraform.
+
+In my own cluster, I see that the image is pulled successfully and starts:
+```shell
+$ k describe pod test-server-959dd6866-2qdmh
+Name:         test-server-959dd6866-2qdmh
+Namespace:    default
+...
+Containers:
+  fixes:
+    Container ID:   docker://4e7b380567b1540f26067ae67f27983b34752052573cdda18712d866e3af7f91
+    Image:          bjd2385/private-httpd-mod:latest
+    Image ID:       docker-pullable://bjd2385/httpd-mod@sha256:5e6c44a5b537db972cc53faf7508d8629e7c906084d79e380e40d7c99b777cf4
+    Port:           443/TCP
+    Host Port:      0/TCP
+    State:          Running
+      Started:      Sun, 18 Jul 2021 13:10:25 -0400
+    Ready:          True
+    Restart Count:  0
+    Limits:
+      cpu:     500m
+      memory:  500Mi
+    Requests:
+      cpu:        200m
+      memory:     200Mi
+    Liveness:     tcp-socket :443 delay=0s timeout=1s period=10s #success=1 #failure=3
+    Readiness:    tcp-socket :443 delay=0s timeout=1s period=10s #success=1 #failure=3
+...
+```
