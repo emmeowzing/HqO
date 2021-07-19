@@ -1,4 +1,4 @@
-name: CI
+name: Docker Build
 on:
   release:
     branches: [ master ]
@@ -24,6 +24,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
+          context: website
           push: true
           tags: bjd2385/httpd-mod:latest
       
