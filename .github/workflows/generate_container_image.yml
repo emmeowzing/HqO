@@ -9,6 +9,7 @@ jobs:
   docker:
     runs-on: ubuntu-latest
     steps:
+      # I feel like there's a better way of accomplishing this, but I found in testing that the repo wasn't actually checked out/cloned to the instance for building.
       - name: Check out master
         uses: actions/checkout@master
         with:
@@ -26,9 +27,6 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASS }}
-          
-      - name: Show me context
-        run: ls -lash 
       
       - name: Build and push
         id: docker_build

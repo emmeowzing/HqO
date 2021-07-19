@@ -1,8 +1,6 @@
 HqO Interview Solutions
 =======================
 
-[![Docker Build](https://github.com/bjd2385/HqO/actions/workflows/generate_container_image.yml/badge.svg?event=release)](https://github.com/bjd2385/HqO/actions/workflows/generate_container_image.yml)
-
 Here's a breakdown of this repository's structure -
 
 * `webserver/` - a Helm chart that stands up a horizonally-scaled web server on a K8s cluster.
