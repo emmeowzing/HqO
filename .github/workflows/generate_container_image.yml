@@ -21,6 +21,9 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_PASS }}
+          
+      - name: Show me context
+        run: pwd
       
       - name: Build and push
         id: docker_build
@@ -29,9 +32,6 @@ jobs:
           context: ./website/
           push: true
           tags: bjd2385/httpd-mod:latest
-      
-      - name: Show me context
-        run: pwd
       
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
