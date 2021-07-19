@@ -24,7 +24,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: website
+          context: master:website
           push: true
           tags: bjd2385/httpd-mod:latest
       
