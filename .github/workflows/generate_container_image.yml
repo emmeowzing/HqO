@@ -30,5 +30,8 @@ jobs:
           push: true
           tags: bjd2385/httpd-mod:latest
       
+      - name: Show me context
+        run: pwd
+      
       - name: Image digest
         run: echo ${{ steps.docker_build.outputs.digest }}
